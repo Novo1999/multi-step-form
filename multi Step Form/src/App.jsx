@@ -47,8 +47,9 @@ function Form() {
         })}
       </aside>
       <div className="form__content">
-        <PersonalInfo />
+        {/* <PersonalInfo /> */}
         {/* <Plan /> */}
+        <AddOns />
         <div className="form_buttons">
           <button type="button" className="form_buttons--back">
             <p>Go Back</p>
@@ -136,6 +137,49 @@ function Plan() {
           <span className="plan__switch--slider"></span>
         </label>
         <p>Yearly</p>
+      </div>
+    </div>
+  );
+}
+
+const addOnContent = [
+  {
+    label: "Online service",
+    info: "Access to multiplayer games",
+    price: 1,
+  },
+  {
+    label: "Larger storage",
+    info: "Extra 1TB of cloud save",
+    price: 2,
+  },
+  {
+    label: "Customizable Profile",
+    info: "Custom theme on your profile",
+    price: 2,
+  },
+];
+
+function AddOns() {
+  return (
+    <div className="add-on">
+      <h1>Pick add-ons</h1>
+      <p className="add-on_provide-info">
+        Add-ons help enhance your gaming experience.
+      </p>
+      <div className="add-on__add-on-type">
+        {addOnContent.map((item, i) => {
+          return (
+            <div className="add-on__add-on-type--item" key={i}>
+              <input type="checkbox" />
+              <div>
+                <h4 className="add-on__add-on-type--label">{item.label}</h4>
+                <p className="add-on__add-on-type--info">{item.info}</p>
+              </div>
+              <p className="add-on__add-on-type--price">{`+$${item.price}/mo`}</p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

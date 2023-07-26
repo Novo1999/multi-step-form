@@ -258,3 +258,40 @@ body {
 .plan__switch--slider:before {
   border-radius: 50%;
 }
+
+.add-on__add-on-type {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  height: 18rem;
+  justify-content: center;
+  gap: 0.8rem;
+  input {
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
+}
+
+.add-on__add-on-type--item {
+  display: grid;
+  grid-template-columns: 1rem 14rem 4rem;
+  justify-content: space-between;
+  gap: 2rem;
+  border: 1px solid var(--clr-primary-1);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+.add-on__add-on-type--info {
+  font-size: 14px;
+  margin-top: 0.3rem;
+  color: var(--clr-neutral-1);
+}
+
+.add-on__add-on-type--price {
+  justify-self: center;
+  align-self: center;
+  color: var(--clr-primary-2);
+  font-weight: var(--f-weight-2);
+  font-size: 14px;
+}
