@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./app.scss";
 
 const asideContent = [
@@ -45,9 +46,9 @@ function Form() {
           );
         })}
       </aside>
-      <div className="personal__details">
-        {/* <PersonalInfo /> */}
-        <Plan />
+      <div className="form__content">
+        <PersonalInfo />
+        {/* <Plan /> */}
         <div className="form_buttons">
           <button type="button" className="form_buttons--back">
             <p>Go Back</p>
@@ -101,6 +102,10 @@ const planContent = [
 ];
 
 function Plan() {
+  const [isChecked, setIsChecked] = useState(false);
+  function handleToggle() {
+    setIsChecked(!isChecked);
+  }
   return (
     <div className="plan">
       <h1>Select your plan</h1>
@@ -123,6 +128,14 @@ function Plan() {
             </div>
           );
         })}
+      </div>
+      <div className="plan__switch__container">
+        <p>Monthly</p>
+        <label className="plan__switch">
+          <input type="checkbox" checked={isChecked} onChange={handleToggle} />
+          <span className="plan__switch--slider"></span>
+        </label>
+        <p>Yearly</p>
       </div>
     </div>
   );
