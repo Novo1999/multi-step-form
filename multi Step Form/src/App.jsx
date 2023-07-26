@@ -14,6 +14,20 @@ function App() {
   );
 }
 
+const personalInfo = [
+  {
+    text: "Name",
+    required: "This field is required",
+  },
+  {
+    text: "Email",
+    required: "This field is required",
+  },
+  {
+    text: "Phone",
+    required: "This field is required",
+  },
+];
 function Form() {
   return (
     <div className="form">
@@ -32,23 +46,85 @@ function Form() {
         })}
       </aside>
       <div className="personal__details">
-        <h1>Personal info</h1>
-        <p>Please provide your name, email address, and phone number.</p>
-        <label className="personal__details--name" htmlFor="name">
-          <p>Name</p>
-          <p className="personal__details--name-required">
-            This field is required
-          </p>
-        </label>
-        <input type="text" name="Name" id="name" />
-        <label htmlFor="Email Address">Email Address</label>
-        <input type="text" name="Email" id="email" />
-        <label htmlFor="Phone Number">Phone Number</label>
-        <input type="text" name="Phone" id="phone" />
-        <button>Next Step</button>
+        {/* <PersonalInfo /> */}
+        <Plan />
+        <div className="form_buttons">
+          <button type="button" className="form_buttons--back">
+            <p>Go Back</p>
+          </button>
+          <button type="button">
+            <p>Next Step</p>
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
+function PersonalInfo() {
+  return (
+    <>
+      <h1>Personal info</h1>
+      <p className="personal__details--provide-info">
+        Please provide your name, email address, and phone number.
+      </p>
+      {personalInfo.map((item) => {
+        return (
+          <>
+            <label className="personal__details--name" htmlFor="name">
+              <p>{item.text}</p>
+              <p className="personal__details--name-required">
+                {item.required}
+              </p>
+            </label>
+            <input type="text" name={item.text} id={item.text} />
+          </>
+        );
+      })}
+    </>
+  );
+}
+
+const planContent = [
+  {
+    text: "Arcade",
+    price: 9,
+  },
+  {
+    text: "Advanced",
+    price: 12,
+  },
+  {
+    text: "Pro",
+    price: 15,
+  },
+];
+
+function Plan() {
+  return (
+    <div className="plan">
+      <h1>Select your plan</h1>
+      <p className="plan_provide-info">
+        You have the option of monthly or yearly billing.
+      </p>
+      <div className="plan__plan-type">
+        {planContent.map((item, i) => {
+          return (
+            <div className="plan__plan-type-item" key={i}>
+              <img
+                src={`./images/icon-${item.text.toLowerCase()}.svg`}
+                alt=""
+              />
+              <div>
+                <h3>{item.text}</h3>
+                <br />
+                <h3 className="plan__plan-type--price">{`$${item.price}/mo`}</h3>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 export default App;

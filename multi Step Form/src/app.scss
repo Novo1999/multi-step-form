@@ -43,13 +43,14 @@ body {
   text-transform: uppercase;
   display: grid;
   grid-template-columns: 20rem 38rem;
+  color: var(--clr-primary-1);
 }
 
 .form__aside {
   p,
   h1 {
     position: relative;
-    bottom: 30rem;
+    bottom: 33.5rem;
     color: var(--clr-neutral-3);
   }
   h1 {
@@ -84,6 +85,20 @@ body {
   font-weight: var(--f-weight-1);
   opacity: 0.8;
 }
+.form_buttons {
+  display: flex;
+  justify-content: space-between;
+}
+.form_buttons--back {
+  position: relative;
+  top: 10rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--clr-primary-1);
+  font-size: var(--f-size);
+  font-weight: var(--f-weight-3);
+}
 .personal__details {
   text-transform: capitalize;
   display: flex;
@@ -91,34 +106,89 @@ body {
   gap: 1rem;
   width: 25rem;
   margin: 5rem auto;
+  h1 {
+    margin-bottom: 0.3rem;
+  }
   input {
     height: 2.5rem;
     border-radius: 0.5rem;
     border: none;
-    outline: 1px solid rgba(0, 0, 0, 0.192);
+    outline: 1px solid var(--clr-neutral-1);
     padding-left: 1rem;
     font-size: var(--f-size);
+    color: var(--clr-primary-1);
+    font-weight: var(--f-weight-3);
   }
-  button {
+  input:focus {
+    outline: 2px solid var(--clr-neutral-1);
+  }
+  button:not(:first-child) {
     width: 8rem;
     height: 3rem;
     position: relative;
-    left: 17rem;
-    top: 2rem;
+    top: 10rem;
     background-color: var(--clr-primary-1);
     color: var(--clr-neutral-4);
     border-radius: 0.5rem;
     cursor: pointer;
+    font-size: var(--f-size);
+    font-weight: var(--f-weight-2);
   }
   button:hover {
     opacity: 0.8;
     transition: 0.3s linear all;
   }
 }
-.personal__details--name {
+.personal__details--name,
+.personal__details--email,
+.personal__details--phone {
   display: flex;
   justify-content: space-between;
+  font-size: 14px;
+  font-weight: var(--f-weight-2);
 }
-.personal__details--name-required {
+.personal__details--name-required,
+.personal__details--email-required,
+.personal__details--phone-required {
   color: var(--clr-primary-5);
+  font-weight: var(--f-weight-3);
+}
+
+.personal__details--provide-info {
+  opacity: 0.5;
+  width: 40rem;
+  font-size: 14px;
+  margin-bottom: 2rem;
+}
+
+.plan__plan-type {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  height: 10rem;
+  margin-top: 2rem;
+  font-size: 12px;
+}
+
+.plan__plan-type-item {
+  border: 1px solid var(--clr-neutral-1);
+  width: 8rem;
+
+  display: flex;
+  flex-direction: column;
+  img {
+    width: 40px;
+    height: 40px;
+  }
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2.5rem;
+  padding-left: 1rem;
+  border-radius: 1rem;
+  cursor: pointer;
+}
+
+.plan__plan-type--price {
+  color: var(--clr-neutral-1);
+  font-weight: var(--f-weight-1);
 }
