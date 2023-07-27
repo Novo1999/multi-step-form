@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./app.scss";
 
 const asideContent = [
@@ -14,6 +14,7 @@ function App() {
     </div>
   );
 }
+export default App;
 
 const personalInfo = [
   {
@@ -30,6 +31,18 @@ const personalInfo = [
   },
 ];
 function Form() {
+  const [personalInfoState, setPersonalInfoState] = useState([
+    {
+      field1: "Name",
+      field2: "Email",
+      field3: "Phone",
+      name: "",
+      email: "",
+      phone: "",
+      required: "This field is required",
+    },
+  ]);
+
   return (
     <div className="form">
       <aside className="form__aside">
@@ -47,14 +60,19 @@ function Form() {
         })}
       </aside>
       <div className="form__content">
-        {/* <PersonalInfo /> */}
+        <PersonalInfo
+          personalInfoState={personalInfoState}
+          onSetPersonalInfoState={setPersonalInfoState}
+        />
         {/* <Plan /> */}
-        <AddOns />
+        {/* <AddOns /> */}
+        {/* <FinishUp /> */}
+
         <div className="form_buttons">
           <button type="button" className="form_buttons--back">
             <p>Go Back</p>
           </button>
-          <button type="button">
+          <button className="form_buttons--next" type="button">
             <p>Next Step</p>
           </button>
         </div>
@@ -63,24 +81,53 @@ function Form() {
   );
 }
 
-function PersonalInfo() {
+function PersonalInfo({ personalInfoState, onSetPersonalInfoState }) {
+  function handleSubmit(e) {
+    e.preventDefault();
+    onSetPersonalInfoState((info) => [...info, e.target.value]);
+  }
+  useEffect(() => {
+    console.log(personalInfoState);
+  }, [personalInfoState]);
   return (
     <>
       <h1>Personal info</h1>
       <p className="personal__details--provide-info">
         Please provide your name, email address, and phone number.
       </p>
-      {personalInfo.map((item) => {
+      {personalInfoState.map((item, i) => {
         return (
-          <>
-            <label className="personal__details--name" htmlFor="name">
-              <p>{item.text}</p>
-              <p className="personal__details--name-required">
-                {item.required}
-              </p>
-            </label>
-            <input type="text" name={item.text} id={item.text} />
-          </>
+          <div key={i}>
+            <form onSubmit={handleSubmit} key={i}>
+              <div className="personal__details--container">
+                <label className="personal__details--name" htmlFor={item.text}>
+                  <p>{item.field1}</p>
+                  <p className="personal__details--name-required">
+                    {item.required}
+                  </p>
+                </label>
+                <input type="text" value={item.name}></input>
+              </div>
+              <div className="personal__details--container">
+                <label className="personal__details--name" htmlFor={item.text}>
+                  <p>{item.field2}</p>
+                  <p className="personal__details--name-required">
+                    {item.required}
+                  </p>
+                </label>
+                <input type="text" value={item.email}></input>
+              </div>
+              <div className="personal__details--container">
+                <label className="personal__details--name" htmlFor={item.text}>
+                  <p>{item.field3}</p>
+                  <p className="personal__details--name-required">
+                    {item.required}
+                  </p>
+                </label>
+                <input type="text" value={item.phone}></input>
+              </div>
+            </form>
+          </div>
         );
       })}
     </>
@@ -162,11 +209,9 @@ const addOnContent = [
 
 function AddOns() {
   return (
-    <div className="add-on">
+    <div>
       <h1>Pick add-ons</h1>
-      <p className="add-on_provide-info">
-        Add-ons help enhance your gaming experience.
-      </p>
+      <p>Add-ons help enhance your gaming experience.</p>
       <div className="add-on__add-on-type">
         {addOnContent.map((item, i) => {
           return (
@@ -184,4 +229,38 @@ function AddOns() {
     </div>
   );
 }
-export default App;
+
+function FinishUp() {
+  return (
+    <div>
+      <h1>Finishing up</h1>
+      <p className="finish__up-message">
+        Double check everything looks OK before confirming.
+      </p>
+      <div className="finish__up">
+        <div className="finish__up-plan">
+          <div>
+            <p className="finish__up-plan--plan">Arcade (Monthly)</p>
+            <button id="finish__up--change-btn">Change</button>
+          </div>
+          <p className="finish__up-plan--price">$9/mo</p>
+        </div>
+        <hr />
+        <div className="finish__up-add-ons">
+          <div>
+            <p className="finish__up-feature">Online service</p>
+            <p className="finish__up-plan--price">+$1/mo</p>
+          </div>
+          <div>
+            <p className="finish__up-feature">Larger storage</p>
+            <p className="finish__up-plan--price">+$2/mo</p>
+          </div>
+        </div>
+      </div>
+      <div className="finish__up-total">
+        <p className="finish__up-feature">Total (per month)</p>
+        <p className="finish__up-total-price">+$12/mo</p>
+      </div>
+    </div>
+  );
+}
