@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import "./app.scss";
 
 const asideContent = [
@@ -31,6 +31,9 @@ const personalInfo = [
   },
 ];
 function Form() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [personalInfoState, setPersonalInfoState] = useState([
     {
       field1: "Name",
@@ -42,7 +45,21 @@ function Form() {
       required: "This field is required",
     },
   ]);
-
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (name && phone && email) {
+      const newPersonalInfo = {
+        field1: "Name",
+        field2: "Email",
+        field3: "Phone",
+        name,
+        email,
+        phone,
+        required: "This field is required",
+      };
+      setPersonalInfoState(() => [newPersonalInfo]);
+    }
+  }
   return (
     <div className="form">
       <aside className="form__aside">
@@ -61,8 +78,14 @@ function Form() {
       </aside>
       <div className="form__content">
         <PersonalInfo
+          name={name}
+          email={email}
+          phone={phone}
+          onSetName={setName}
+          onSetEmail={setEmail}
+          onSetPhone={setPhone}
           personalInfoState={personalInfoState}
-          onSetPersonalInfoState={setPersonalInfoState}
+          onSubmit={handleSubmit}
         />
         {/* <Plan /> */}
         {/* <AddOns /> */}
@@ -72,7 +95,11 @@ function Form() {
           <button type="button" className="form_buttons--back">
             <p>Go Back</p>
           </button>
-          <button className="form_buttons--next" type="button">
+          <button
+            onClick={handleSubmit}
+            className="form_buttons--next"
+            type="button"
+          >
             <p>Next Step</p>
           </button>
         </div>
@@ -81,55 +108,68 @@ function Form() {
   );
 }
 
-function PersonalInfo({ personalInfoState, onSetPersonalInfoState }) {
-  function handleSubmit(e) {
-    e.preventDefault();
-    onSetPersonalInfoState((info) => [...info, e.target.value]);
-  }
-  useEffect(() => {
-    console.log(personalInfoState);
-  }, [personalInfoState]);
+function PersonalInfo({
+  personalInfoState,
+  name,
+  email,
+  phone,
+  onSetName,
+  onSetEmail,
+  onSetPhone,
+}) {
   return (
     <>
       <h1>Personal info</h1>
       <p className="personal__details--provide-info">
         Please provide your name, email address, and phone number.
       </p>
-      {personalInfoState.map((item, i) => {
-        return (
-          <div key={i}>
-            <form onSubmit={handleSubmit} key={i}>
+      <form>
+        {personalInfoState.map((item, i) => {
+          return (
+            <div key={i}>
               <div className="personal__details--container">
                 <label className="personal__details--name" htmlFor={item.text}>
                   <p>{item.field1}</p>
                   <p className="personal__details--name-required">
-                    {item.required}
+                    {!name && item.required}
                   </p>
                 </label>
-                <input type="text" value={item.name}></input>
+                <input
+                  onChange={(e) => onSetName(e.target.value)}
+                  type="text"
+                  value={name}
+                />
               </div>
               <div className="personal__details--container">
                 <label className="personal__details--name" htmlFor={item.text}>
                   <p>{item.field2}</p>
                   <p className="personal__details--name-required">
-                    {item.required}
+                    {!email && item.required}
                   </p>
                 </label>
-                <input type="text" value={item.email}></input>
+                <input
+                  onChange={(e) => onSetEmail(e.target.value)}
+                  value={email}
+                  type="text"
+                />
               </div>
               <div className="personal__details--container">
                 <label className="personal__details--name" htmlFor={item.text}>
                   <p>{item.field3}</p>
                   <p className="personal__details--name-required">
-                    {item.required}
+                    {!phone && item.required}
                   </p>
                 </label>
-                <input type="text" value={item.phone}></input>
+                <input
+                  onChange={(e) => onSetPhone(e.target.value)}
+                  value={phone}
+                  type="text"
+                />
               </div>
-            </form>
-          </div>
-        );
-      })}
+            </div>
+          );
+        })}
+      </form>
     </>
   );
 }
