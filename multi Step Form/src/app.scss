@@ -92,7 +92,7 @@ body {
 }
 .form_buttons--back {
   position: relative;
-  top: 3rem;
+  top: 3.5rem;
   background: none;
   border: none;
   cursor: pointer;
@@ -136,7 +136,7 @@ body {
     width: 8rem;
     height: 3rem;
     position: relative;
-    top: 4rem;
+    top: 4.3rem;
     background-color: var(--clr-primary-1);
     color: var(--clr-neutral-4);
     border-radius: 0.5rem;
@@ -172,17 +172,20 @@ body {
   input {
     grid-row: 2;
   }
+  margin-bottom: -0.1rem;
 }
 .personal__details--provide-info {
   opacity: 0.5;
   width: 40rem;
   font-size: 14px;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
-
+#required-outline {
+  outline: 1px solid red;
+}
 .plan__plan-type {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   gap: 1rem;
   height: 10rem;
   margin-top: 2rem;
@@ -192,6 +195,7 @@ body {
 .plan__plan-type-item {
   border: 1px solid var(--clr-neutral-1);
   width: 8rem;
+  height: 11rem;
   display: flex;
   flex-direction: column;
   img {
@@ -206,6 +210,13 @@ body {
   cursor: pointer;
 }
 
+.plan__plan-type-item:hover {
+  background-color: var(--clr-neutral-3);
+  transition: 0.3s linear all;
+}
+.selected {
+  background-color: var(--clr-neutral-3);
+}
 .plan__plan-type--price {
   color: var(--clr-neutral-1);
   font-weight: var(--f-weight-1);
@@ -234,7 +245,10 @@ body {
     height: 0;
   }
 }
-
+.plan {
+  width: 28rem;
+  height: 22rem;
+}
 .plan__switch--slider {
   position: absolute;
   cursor: pointer;
@@ -281,7 +295,7 @@ body {
   margin-top: 1rem;
   display: flex;
   flex-direction: column;
-  height: 18rem;
+  height: 17.3rem;
   width: 28rem;
   justify-content: center;
   gap: 0.8rem;
@@ -289,6 +303,10 @@ body {
     border: none;
     outline: none;
     cursor: pointer;
+    align-self: center;
+    width: 20px;
+    height: 20px;
+    position: relative;
   }
 }
 
@@ -318,7 +336,7 @@ body {
   background-color: var(--clr-neutral-3);
   border-radius: 0.5rem;
   margin-top: 2rem;
-  height: 14rem;
+  height: 15.9rem;
   width: 28rem;
   display: flex;
   flex-direction: column;
