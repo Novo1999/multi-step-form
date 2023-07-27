@@ -36,13 +36,14 @@ function Form() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [planState, setPlanState] = useState({
-    name: "Arcade",
-    price: 9,
-    status: "monthly",
-  });
+  const [planState, setPlanState] = useState([
+    {
+      name: "Arcade",
+      price: 9,
+      status: "monthly",
+    },
+  ]);
   const [addOnsState, setAddOnsState] = useState([{ service: [], price: [] }]);
-  // console.log(addOnsState[0].price);
   const [selectedPlan, setSelectedPlan] = useState(1);
   const [personalInfoState, setPersonalInfoState] = useState([
     {
@@ -78,27 +79,26 @@ function Form() {
       };
       setPersonalInfoState(() => [newPersonalInfo]);
       setCurrentStep((step) => step + 1);
-      // console.log(personalInfoState);
     }
+  }
+
+  useEffect(() => {
     setFinalState(() => [
       {
-        plan: planState.name,
-        status: planState.status,
-        planPrice: planState.price,
+        plan: planState[0].name,
+        status: planState[0].status,
+        planPrice: planState[0].price,
         service1: addOnsState[0].service[0],
         service2: addOnsState[0].service[1],
         service3: addOnsState[0].service[2],
-        servicePrice1: addOnsState[0].price[0],
-        servicePrice2: addOnsState[0].price[1],
-        servicePrice3: addOnsState[0].price[2],
-        totalPrice:
-          addOnsState[0].price[0] +
-          addOnsState[0].price[1] +
-          addOnsState[0].price[2],
+        servicePrice1: addOnsState[0].price[0] || 0,
+        servicePrice2: addOnsState[0].price[1] || 0,
+        servicePrice3: addOnsState[0].price[2] || 0,
       },
     ]);
-  }
-  console.log(finalState);
+  }, [addOnsState, planState]);
+  // console.log(finalState);
+  console.log(planState);
   function handleBack() {
     setCurrentStep((step) => step - 1);
   }
@@ -155,26 +155,35 @@ function Form() {
           />
         )}
         {currentStep === 3 && (
-          <AddOns onSetAddOnsState={setAddOnsState} isChecked={isChecked} />
+          <AddOns
+            onSetAddOnsState={setAddOnsState}
+            isChecked={isChecked}
+            addOnsState={addOnsState}
+          />
         )}
-        {currentStep === 4 && <FinishUp finalState={finalState} />}
+        {currentStep === 4 && (
+          <FinishUp finalState={finalState} onSetCurrentStep={setCurrentStep} />
+        )}
+        {currentStep === 5 && (
+          <ThankYou personalInfoState={personalInfoState} />
+        )}
 
         <div className="form_buttons">
           <button
-            style={currentStep === 1 ? buttonHidden : {}}
+            style={currentStep === 1 || currentStep === 5 ? buttonHidden : {}}
             type="button"
             className="form_buttons--back"
             onClick={handleBack}
           >
             <p>Go Back</p>
           </button>
-          {name && email && phone && currentStep < 4 && (
+          {name && email && phone && currentStep <= 4 && (
             <button
               onClick={handleNext}
               className="form_buttons--next"
               type="button"
             >
-              <p>Next Step</p>
+              <p>{currentStep === 4 ? "Confirm" : "Next Step"}</p>
             </button>
           )}
         </div>
@@ -288,7 +297,7 @@ function Plan({
   }, [isChecked, onSetPlanState]);
   function handlePlan(i, item) {
     onSetSelectedPlan(i + 1);
-    onSetPlanState([
+    onSetPlanState(() => [
       {
         name: item.name,
         price: item.price,
@@ -345,24 +354,28 @@ function Plan({
 
 const addOnContent = [
   {
-    id: 1,
-    label: "Online service",
+    label: "Online Service",
     info: "Access to multiplayer games",
     price: 1,
+    checked: false,
   },
-  { id: 2, label: "Larger storage", info: "Extra 1TB of cloud save", price: 2 },
   {
-    id: 3,
+    label: "Larger Storage",
+    info: "Extra 1TB of cloud save",
+    price: 2,
+    checked: false,
+  },
+  {
     label: "Customizable Profile",
     info: "Custom theme on your profile",
     price: 2,
+    checked: false,
   },
 ];
 
-function AddOns({ isChecked, onSetAddOnsState }) {
+function AddOns({ isChecked, onSetAddOnsState, addOnsState }) {
   function handleChecked(e) {
     const targetClassName = ".add-on__add-on-type--item";
-    const target = e.target;
     const targetChecked = e.target.checked;
     const targetService =
       e.target.closest(targetClassName).firstElementChild.nextSibling.firstChild
@@ -375,6 +388,11 @@ function AddOns({ isChecked, onSetAddOnsState }) {
       .firstElementChild.nextElementSibling.nextSibling.innerText.slice(2, -5);
     const targetPrice = !isChecked ? monthlyPrice : yearlyPrice;
     if (targetChecked) {
+      addOnContent.map((item) => {
+        if (item.label === targetService) {
+          item.checked = true;
+        }
+      });
       onSetAddOnsState((prev) => [
         {
           service: [
@@ -388,6 +406,11 @@ function AddOns({ isChecked, onSetAddOnsState }) {
       ]);
     }
     if (!targetChecked) {
+      addOnContent.map((item) => {
+        if (item.label === targetService) {
+          item.checked = false;
+        }
+      });
       onSetAddOnsState((prev) => [
         {
           service: [
@@ -403,6 +426,7 @@ function AddOns({ isChecked, onSetAddOnsState }) {
       ]);
     }
   }
+
   return (
     <div>
       <h1>Pick add-ons</h1>
@@ -416,7 +440,7 @@ function AddOns({ isChecked, onSetAddOnsState }) {
                   handleChecked(e);
                 }}
                 type="checkbox"
-                id={`input-${item.id}`}
+                checked={item.checked}
               />
               <div>
                 <h4 className="add-on__add-on-type--label">{item.label}</h4>
@@ -435,7 +459,7 @@ function AddOns({ isChecked, onSetAddOnsState }) {
   );
 }
 
-function FinishUp({ finalState }) {
+function FinishUp({ finalState, onSetCurrentStep }) {
   return (
     <div>
       <h1>Finishing up</h1>
@@ -446,39 +470,86 @@ function FinishUp({ finalState }) {
         <div className="finish__up-plan">
           <div>
             <p className="finish__up-plan--plan">
-              {finalState.name}
-              {finalState.status}
+              {finalState[0].plan}({finalState[0].status})
             </p>
-            <button id="finish__up--change-btn">Change</button>
+            <button
+              onClick={() => onSetCurrentStep(2)}
+              id="finish__up--change-btn"
+            >
+              Change
+            </button>
           </div>
-          <p className="finish__up-plan--price">${finalState.planPrice}/mo</p>
+          <p className="finish__up-plan--price">
+            ${finalState[0].planPrice}/
+            {finalState[0].status === "monthly" ? "mo" : "year"}
+          </p>
         </div>
         <hr />
         <div className="finish__up-add-ons">
           <div>
-            <p className="finish__up-feature">{finalState.service1}</p>
-            <p className="finish__up-plan--price">
-              +${finalState.servicePrice1}/mo
-            </p>
+            <p className="finish__up-feature">{finalState[0].service1}</p>
+            {finalState[0].servicePrice1 ? (
+              <p className="finish__up-plan--price">
+                +${finalState[0].servicePrice1}/
+                {finalState[0].status === "monthly" ? "mo" : "year"}
+              </p>
+            ) : (
+              ""
+            )}
           </div>
           <div>
-            <p className="finish__up-feature">{finalState.service2}</p>
-            <p className="finish__up-plan--price">
-              +${finalState.servicePrice2}/mo
-            </p>
+            <p className="finish__up-feature">{finalState[0].service2}</p>
+            {finalState[0].servicePrice2 ? (
+              <p className="finish__up-plan--price">
+                +${finalState[0].servicePrice2}/
+                {finalState[0].status === "monthly" ? "mo" : "year"}
+              </p>
+            ) : (
+              ""
+            )}
           </div>
           <div>
-            <p className="finish__up-feature">{finalState.service3}</p>
-            <p className="finish__up-plan--price">
-              +${finalState.servicePrice3}/mo
-            </p>
+            <p className="finish__up-feature">{finalState[0].service3}</p>
+            {finalState[0].servicePrice3 ? (
+              <p className="finish__up-plan--price">
+                +${finalState[0].servicePrice3}/
+                {finalState[0].status === "monthly" ? "mo" : "year"}
+              </p>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>
       <div className="finish__up-total">
-        <p className="finish__up-feature">Total (per month)</p>
-        <p className="finish__up-total-price">+${finalState.totalPrice}/mo</p>
+        <p className="finish__up-feature">
+          Total (per {finalState[0].status === "monthly" ? "month" : "year"})
+        </p>
+        <p className="finish__up-total-price">
+          +$
+          {finalState[0].planPrice +
+            finalState[0].servicePrice1 +
+            finalState[0].servicePrice2 +
+            finalState[0].servicePrice3}
+          /{finalState[0].status === "monthly" ? "mo" : "year"}
+        </p>
       </div>
+    </div>
+  );
+}
+
+function ThankYou({ personalInfoState }) {
+  return (
+    <div className="thank__you">
+      <img src="./images/icon-thank-you.svg" alt="thanks" />
+      <h1 className="thank__you--header">
+        Thank You {personalInfoState[0].name}!
+      </h1>
+      <p className="thank__you--paragraph">
+        Thanks for confirming your subscription! We hope you have fun using our
+        platform.If you ever need support,please feel free to email us at
+        support@loremgaming.com.
+      </p>
     </div>
   );
 }

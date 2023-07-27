@@ -397,7 +397,7 @@ body {
 
 .finish__up-total {
   padding: 1.5rem 0 0 1.5rem;
-  margin-bottom: -2rem;
+  margin-bottom: -3rem;
   display: flex;
   justify-content: space-between;
 }
@@ -405,4 +405,25 @@ body {
   color: var(--clr-primary-2);
   font-weight: var(--f-weight-3);
   font-size: 20px;
+}
+
+.thank__you {
+  margin-top: 8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3rem;
+  margin-left: 3rem;
+  img {
+    position: relative;
+    bottom: 2rem;
+  }
+}
+.thank__you--paragraph {
+  text-align: center;
+  font-size: 18px;
+  width: 35rem;
+  line-height: 2rem;
+  color: var(--clr-neutral-1);
 }
